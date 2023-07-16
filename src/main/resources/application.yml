@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: seed-desafio-cdc
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+  jpa:
+    show-sql: true
+    generate-ddl: true
+  h2:
+    console.enabled: true
+  datasource:
+    url: jdbc:h2:file:./data/cdc
+    username: sa
+    classname: org.h2.Driver
+logging:
+  level:
+    root: INFO
+    org.springframework.web.client.RestTemplate: ERROR
+    org.hibernate.type.descriptor.sql: ERROR
