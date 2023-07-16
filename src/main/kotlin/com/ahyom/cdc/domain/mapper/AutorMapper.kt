@@ -1,7 +1,7 @@
-package com.ahyom.cdc.model.mapper
+package com.ahyom.cdc.domain.mapper
 
-import com.ahyom.cdc.model.entity.Autor
-import com.ahyom.cdc.model.request.AutorRequest
+import com.ahyom.cdc.domain.entity.Autor
+import com.ahyom.cdc.domain.request.AutorRequest
 import mu.KotlinLogging
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime

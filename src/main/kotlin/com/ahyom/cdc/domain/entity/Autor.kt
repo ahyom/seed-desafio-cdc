@@ -1,4 +1,4 @@
-package com.ahyom.cdc.model.entity
+package com.ahyom.cdc.domain.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

@@ -1,4 +1,4 @@
-package com.ahyom.cdc.model.mapper
+package com.ahyom.cdc.domain.mapper
 
 interface Mapper<D, E> {
 

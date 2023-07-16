@@ -1,4 +1,4 @@
-package com.ahyom.cdc.model.request
+package com.ahyom.cdc.domain.request
 
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.Max

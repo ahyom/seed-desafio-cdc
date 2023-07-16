@@ -1,7 +1,7 @@
 package com.ahyom.cdc.controller
 
-import com.ahyom.cdc.model.mapper.AutorMapper
-import com.ahyom.cdc.model.request.AutorRequest
+import com.ahyom.cdc.domain.mapper.AutorMapper
+import com.ahyom.cdc.domain.request.AutorRequest
 import com.ahyom.cdc.service.AutorService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity

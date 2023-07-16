@@ -1,6 +1,6 @@
 package com.ahyom.cdc.service
 
-import com.ahyom.cdc.model.entity.Autor
+import com.ahyom.cdc.domain.entity.Autor
 import mu.KotlinLogging
 import org.springframework.stereotype.Service
 
