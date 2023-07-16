@@ -4,6 +4,8 @@ import com.ahyom.cdc.domain.mapper.AutorMapper
 import com.ahyom.cdc.domain.request.AutorRequest
 import com.ahyom.cdc.service.AutorService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -28,7 +30,7 @@ class AutorController @Autowired constructor(
 
         val autorCreated = autorService.createAutor(autor)
 
-        return ResponseEntity.ok(autorMapper.fromEntity(autorCreated))
+        return ResponseEntity.status(HttpStatus.CREATED).body(autorMapper.fromEntity(autorCreated))
     }
 
     @GetMapping
