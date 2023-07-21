@@ -1,6 +1,7 @@
 package com.ahyom.cdc.controller.advice
 
 import com.ahyom.cdc.controller.AutorController
+import com.ahyom.cdc.domain.exception.AutorAlreadyExistsException
 import com.ahyom.cdc.domain.exception.BadRequestException
 import com.ahyom.cdc.domain.exception.NotFoundException
 import com.ahyom.cdc.domain.request.ErrorRequest
@@ -15,6 +16,19 @@ private val logger = KotlinLogging.logger {}
 
 @ControllerAdvice(assignableTypes = [AutorController::class])
 class ControllerAdvice {
+
+    @ExceptionHandler(AutorAlreadyExistsException::class)
+    fun handleAutorAlreadyExistsException(exception: AutorAlreadyExistsException): ResponseEntity<ErrorRequest> {
+        logger.error("Handling AutorAlreadyExistsException: ${exception.message}", exception)
+        return ResponseEntity(
+            ErrorRequest(
+                HttpStatus.BAD_REQUEST.reasonPhrase,
+                HttpStatus.BAD_REQUEST.value(),
+                exception.message,
+            ),
+            HttpStatus.BAD_REQUEST,
+        )
+    }
 
     @ExceptionHandler(BadRequestException::class)
     fun handleBadRequestException(exception: BadRequestException): ResponseEntity<ErrorRequest> {

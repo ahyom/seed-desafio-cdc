@@ -1,6 +1,7 @@
 package com.ahyom.cdc.service
 
 import com.ahyom.cdc.domain.entity.Autor
+import com.ahyom.cdc.domain.exception.AutorAlreadyExistsException
 import com.ahyom.cdc.domain.exception.NotFoundException
 import com.ahyom.cdc.domain.repository.AutorRepository
 import mu.KotlinLogging
@@ -16,7 +17,13 @@ class AutorService @Autowired constructor(
 ) {
     fun createAutor(autor: Autor): Autor {
         logger.debug { "creating autor..." }
+
+        // should validate if email already exists
+        validateIfEmailAlreadyExists(autor.email)
+
+        // will save autor and log information
         autorRepository.save(autor)
+
         logger.debug { "autor created with id ${autor.id}" }
         return autor
     }
@@ -41,5 +48,13 @@ class AutorService @Autowired constructor(
     fun deleteAutor(autorId: UUID) {
         logger.debug { "deleting autor by id $autorId" }
         autorRepository.deleteById(autorId)
+    }
+
+    private fun validateIfEmailAlreadyExists(email: String) {
+        logger.debug { "validating if email $email already exists" }
+        val autor = autorRepository.findByEmail(email)
+        if (autor.isNotEmpty()) {
+            throw AutorAlreadyExistsException("Já existe um autor com o email $email")
+        }
     }
 }

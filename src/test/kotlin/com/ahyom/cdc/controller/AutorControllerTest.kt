@@ -1,5 +1,6 @@
 package com.ahyom.cdc.controller
 
+import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -10,18 +11,20 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.transaction.annotation.Transactional
 
 private const val BASE_ENDPOINT = "/autor"
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("local")
+@Transactional
 class AutorControllerTest @Autowired constructor(
     val mockMvc: MockMvc,
 ) {
 
     @Test
-    fun `should create some autor with success and return 201 HTTP Code`() {
+    fun `should return 201 HTTP when try to create some Autor`() {
         val autorRequest = """
             {
                 "name": "John Frusciante",
@@ -45,7 +48,7 @@ class AutorControllerTest @Autowired constructor(
         val autorRequest = """
             {
                 "name": "",
-                "email": "john@frusciante.com",
+                "email": "john@insideofemptiness.com",
                 "description": "Musico e integrante dos Red Hot Chili Peppers"
             }
         """.trimIndent()
@@ -81,7 +84,7 @@ class AutorControllerTest @Autowired constructor(
         val autorRequest = """
             {
                 "name": "John Frusciante",
-                "email": "john@frusciante.com",
+                "email": "john@fru.com",
                 "description": ""
             }
         """.trimIndent()
@@ -99,7 +102,7 @@ class AutorControllerTest @Autowired constructor(
         val autorRequest = """
             {
                 "name": "John Frusciante",
-                "email": "john@frusciante.com",
+                "email": "john@rhcp.com",
                 "description": "John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto "
             }
         """.trimIndent()
@@ -119,6 +122,24 @@ class AutorControllerTest @Autowired constructor(
                 "name": "John Frusciante",
                 "email": "johnfrusciante.com",
                 "description": "Musico e integrante dos Red Hot Chili Peppers"
+            }
+        """.trimIndent()
+
+        mockMvc.perform(
+            post(BASE_ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(autorRequest),
+        )
+            .andExpect(status().isBadRequest)
+    }
+
+    @Test
+    fun `should return 400 HTTP when try to create some Autor with an email that is already in use`() {
+        val autorRequest = """
+            {
+                "name": "Arthur Soave",
+                "email": "arthur.soave@tests.comn",
+                "description": "blablablablablabla"
             }
         """.trimIndent()
 

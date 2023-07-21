@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository
 import java.util.UUID
 
 @Repository
-interface AutorRepository : CrudRepository<Autor, UUID>
+interface AutorRepository : CrudRepository<Autor, UUID> {
+
+    fun findByEmail(email: String): List<Autor>
+}
