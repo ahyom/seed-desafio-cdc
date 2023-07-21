@@ -26,7 +26,7 @@ class AutorControllerTest @Autowired constructor(
             {
                 "name": "John Frusciante",
                 "email": "john@frusciante.com",
-                "description": "Musico e integrante dos Red Hot Chili Peppers"
+                "description": "A"
             }
         """.trimIndent()
 
@@ -41,17 +41,92 @@ class AutorControllerTest @Autowired constructor(
     }
 
     @Test
-    fun `should return 400 HTTP when try to create some Autor without name`() {}
+    fun `should return 400 HTTP when try to create some Autor without name`() {
+        val autorRequest = """
+            {
+                "name": "",
+                "email": "john@frusciante.com",
+                "description": "Musico e integrante dos Red Hot Chili Peppers"
+            }
+        """.trimIndent()
+
+        mockMvc.perform(
+            post(BASE_ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(autorRequest),
+        )
+            .andExpect(status().isBadRequest)
+    }
 
     @Test
-    fun `should return 400 HTTP when try to create some Autor without email`() {}
+    fun `should return 400 HTTP when try to create some Autor without email`() {
+        val autorRequest = """
+            {
+                "name": "John Frusciante",
+                "email": "",
+                "description": "Musico e integrante dos Red Hot Chili Peppers"
+            }
+        """.trimIndent()
+
+        mockMvc.perform(
+            post(BASE_ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(autorRequest),
+        )
+            .andExpect(status().isBadRequest)
+    }
 
     @Test
-    fun `should return 400 HTTP when try to create some Autor without description`() {}
+    fun `should return 400 HTTP when try to create some Autor without description`() {
+        val autorRequest = """
+            {
+                "name": "John Frusciante",
+                "email": "john@frusciante.com",
+                "description": ""
+            }
+        """.trimIndent()
+
+        mockMvc.perform(
+            post(BASE_ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(autorRequest),
+        )
+            .andExpect(status().isBadRequest)
+    }
 
     @Test
-    fun `should return 400 HTTP when try to create some Autor with description greater than 400 bytes`() {}
+    fun `should return 400 HTTP when try to create some Autor with description greater than 400 bytes`() {
+        val autorRequest = """
+            {
+                "name": "John Frusciante",
+                "email": "john@frusciante.com",
+                "description": "John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto "
+            }
+        """.trimIndent()
+
+        mockMvc.perform(
+            post(BASE_ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(autorRequest),
+        )
+            .andExpect(status().isBadRequest)
+    }
 
     @Test
-    fun `should return 400 HTTP when try to create some Autor with invalid email`() {}
+    fun `should return 400 HTTP when try to create some Autor with invalid email`() {
+        val autorRequest = """
+            {
+                "name": "John Frusciante",
+                "email": "johnfrusciante.com",
+                "description": "Musico e integrante dos Red Hot Chili Peppers"
+            }
+        """.trimIndent()
+
+        mockMvc.perform(
+            post(BASE_ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(autorRequest),
+        )
+            .andExpect(status().isBadRequest)
+    }
 }

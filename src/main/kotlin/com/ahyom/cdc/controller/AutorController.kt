@@ -5,7 +5,6 @@ import com.ahyom.cdc.domain.request.AutorRequest
 import com.ahyom.cdc.service.AutorService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
-import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -13,9 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
+import jakarta.validation.Valid
 
 @RestController
 @RequestMapping("autor")
@@ -25,7 +24,10 @@ class AutorController @Autowired constructor(
 ) {
 
     @PostMapping
-    fun createAutor(@RequestBody autorRequest: AutorRequest): ResponseEntity<AutorRequest> {
+    fun createAutor(
+        @Valid @RequestBody
+        autorRequest: AutorRequest,
+    ): ResponseEntity<AutorRequest> {
         val autor = autorMapper.toEntity(autorRequest)
 
         val autorCreated = autorService.createAutor(autor)

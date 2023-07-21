@@ -7,6 +7,7 @@ import com.ahyom.cdc.domain.request.ErrorRequest
 import mu.KotlinLogging
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 
@@ -18,6 +19,19 @@ class ControllerAdvice {
     @ExceptionHandler(BadRequestException::class)
     fun handleBadRequestException(exception: BadRequestException): ResponseEntity<ErrorRequest> {
         logger.error("Handling BadRequestException: ${exception.message}", exception)
+        return ResponseEntity(
+            ErrorRequest(
+                HttpStatus.BAD_REQUEST.reasonPhrase,
+                HttpStatus.BAD_REQUEST.value(),
+                exception.message,
+            ),
+            HttpStatus.BAD_REQUEST,
+        )
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException::class)
+    fun handleMethodArgumentInvalid(exception: MethodArgumentNotValidException): ResponseEntity<ErrorRequest> {
+        logger.error("Handling MethodArgumentNotValidException: ${exception.message}", exception)
         return ResponseEntity(
             ErrorRequest(
                 HttpStatus.BAD_REQUEST.reasonPhrase,
