@@ -17,3 +17,6 @@ out/
 /gradlew.bat
 /gradlew
 /data/
+
+.DS_Store
+./src/.DS_Store
