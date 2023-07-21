@@ -21,7 +21,12 @@ class AutorService @Autowired constructor(
         return autor
     }
 
-    // TODO -> update autor
+    fun updateAutor(autor: Autor, autorId: UUID): Autor {
+        logger.debug { "updating autor ID: $autorId and name: ${autor.name}" }
+        autorRepository.save(autor)
+        logger.debug { "updated autor ID: $autorId and name: ${autor.name}" }
+        return autor
+    }
 
     fun getAutors(): List<Autor> {
         logger.debug { "getting autors..." }
@@ -30,7 +35,6 @@ class AutorService @Autowired constructor(
 
     fun getAutorById(autorId: UUID): Autor {
         logger.debug { "getting autor by id $autorId" }
-        // TODO -> should return a 404 if not found
         return autorRepository.findById(autorId).orElseThrow { NotFoundException("Autor $autorId not found") }
     }
 
