@@ -3,11 +3,13 @@ package com.ahyom.cdc.domain.mapper
 import com.ahyom.cdc.domain.entity.Categoria
 import com.ahyom.cdc.domain.request.CategoriaRequest
 import mu.KotlinLogging
+import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 import java.util.UUID
 
 private val logger = KotlinLogging.logger {}
 
+@Component
 class CategoriaMapper : Mapper<CategoriaRequest, Categoria> {
     override fun fromEntity(entity: Categoria): CategoriaRequest {
         return CategoriaRequest(
