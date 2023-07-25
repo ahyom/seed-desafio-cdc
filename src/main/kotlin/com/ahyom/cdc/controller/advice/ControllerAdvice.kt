@@ -20,7 +20,7 @@ class ControllerAdvice {
 
     @ExceptionHandler(EntityAlreadyExistsException::class)
     fun handleAutorAlreadyExistsException(exception: EntityAlreadyExistsException): ResponseEntity<ErrorRequest> {
-        logger.error("Handling AutorAlreadyExistsException: ${exception.message}", exception)
+        logger.error("Handling EntityAlreadyExistsException: ${exception.message}", exception)
         return ResponseEntity(
             ErrorRequest(
                 HttpStatus.BAD_REQUEST.reasonPhrase,
