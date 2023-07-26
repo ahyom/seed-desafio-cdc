@@ -1,13 +1,13 @@
 package com.ahyom.cdc.domain.repository
 
-import com.ahyom.cdc.domain.entity.Autor
+import com.ahyom.cdc.domain.entity.Categoria
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 import java.util.Optional
 import java.util.UUID
 
 @Repository
-interface AutorRepository : CrudRepository<Autor, UUID> {
+interface CategoriaRepository : CrudRepository<Categoria, UUID> {
 
-    fun findByEmail(email: String): Optional<List<Autor>>
+    fun findByName(name: String): Optional<Categoria>
 }

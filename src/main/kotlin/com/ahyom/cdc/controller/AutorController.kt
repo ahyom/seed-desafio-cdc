@@ -70,6 +70,6 @@ class AutorController @Autowired constructor(
     @DeleteMapping("/{autor-id}")
     fun deleteAutor(@PathVariable("autor-id") autorId: String): ResponseEntity<Unit> {
         autorService.deleteAutor(UUID.fromString(autorId))
-        return ResponseEntity.ok().build()
+        return ResponseEntity.noContent().build()
     }
 }

@@ -14,6 +14,6 @@ spring:
     classname: org.h2.Driver
 logging:
   level:
-    root: INFO
+    root: DEBUG
     org.springframework.web.client.RestTemplate: ERROR
     org.hibernate.type.descriptor.sql: ERROR
