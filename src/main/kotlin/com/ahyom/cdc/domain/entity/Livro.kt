@@ -16,24 +16,24 @@ class Livro(
     var id: UUID,
 
     @Column(nullable = false)
-    var titulo: String,
+    var title: String,
 
     @Column(nullable = false, length = 500)
-    var resumo: String,
+    var summary: String,
 
     @Column(nullable = false)
-    var sumario: String,
+    var tableOfContents: String,
 
     @Column(nullable = false)
-    var preco: Double,
+    var price: Double,
 
     @Column(nullable = false)
-    var numeroPaginas: Int,
+    var pageNumbers: Int,
 
     @Column(nullable = false)
     var isbn: String,
 
-    var dataPublicacao: LocalDateTime,
+    var publishDate: LocalDateTime,
 
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "categoria_id", referencedColumnName = "id")
