@@ -37,12 +37,10 @@ class Livro(
 
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "categoria_id", referencedColumnName = "id")
-    @Column(nullable = false)
     var categoria: Categoria,
 
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "autor_id", referencedColumnName = "id")
-    @Column(nullable = false)
     var autor: Autor,
 
     @Column(nullable = false)
