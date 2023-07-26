@@ -62,8 +62,12 @@ class CategoriaService @Autowired constructor(
 
     private fun validateIfCategoriaWithNameAlreadyExists(name: String) {
         logger.debug { "validating if categoria $name already exists" }
-        categoriaRepository
-            .findByName(name)
-            .orElseThrow { EntityAlreadyExistsException("Categoria com o nome $name já existente") }
+
+        val categoria = categoriaRepository.findByName(name)
+
+        if (categoria.isPresent) {
+            logger.error { "categoria $name already exists" }
+            throw EntityAlreadyExistsException("Categoria $name already exists")
+        }
     }
 }

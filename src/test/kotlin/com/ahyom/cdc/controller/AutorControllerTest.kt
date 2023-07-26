@@ -1,6 +1,8 @@
 package com.ahyom.cdc.controller
 
-import org.junit.jupiter.api.Order
+import com.ahyom.cdc.domain.entity.Autor
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -12,6 +14,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
+import java.util.UUID
 
 private const val BASE_ENDPOINT = "/autor"
 
@@ -21,22 +25,30 @@ private const val BASE_ENDPOINT = "/autor"
 @Transactional
 class AutorControllerTest @Autowired constructor(
     val mockMvc: MockMvc,
+    val objectMapper: ObjectMapper,
 ) {
 
-    @Test
-    fun `should return 201 HTTP when try to create some Autor`() {
-        val autorRequest = """
-            {
-                "name": "John Frusciante",
-                "email": "john@frusciante.com",
-                "description": "A"
-            }
-        """.trimIndent()
+    private lateinit var autor: Autor
 
+    private var idAutor = "db540faf-a5e4-4122-b54c-653fc3ed5c4f"
+
+    @BeforeEach
+    fun setup() {
+        autor = Autor(
+            id = UUID.fromString(idAutor),
+            name = "John Frusciante",
+            email = "frusciante@aol.com",
+            description = "Musico e integrante dos Red Hot Chili Peppers",
+            createdAt = LocalDateTime.now(),
+        )
+    }
+
+    @Test
+    fun `a should return 201 HTTP when try to create some Autor`() {
         mockMvc.perform(
             post(BASE_ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(autorRequest),
+                .content(objectMapper.writeValueAsString(autor)),
         )
             .andExpect(status().isCreated)
             .andExpect(jsonPath("$.id").exists())
@@ -45,108 +57,71 @@ class AutorControllerTest @Autowired constructor(
 
     @Test
     fun `should return 400 HTTP when try to create some Autor without name`() {
-        val autorRequest = """
-            {
-                "name": "",
-                "email": "john@insideofemptiness.com",
-                "description": "Musico e integrante dos Red Hot Chili Peppers"
-            }
-        """.trimIndent()
+        autor.name = ""
 
         mockMvc.perform(
             post(BASE_ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(autorRequest),
+                .content(objectMapper.writeValueAsString(autor)),
         )
             .andExpect(status().isBadRequest)
     }
 
     @Test
     fun `should return 400 HTTP when try to create some Autor without email`() {
-        val autorRequest = """
-            {
-                "name": "John Frusciante",
-                "email": "",
-                "description": "Musico e integrante dos Red Hot Chili Peppers"
-            }
-        """.trimIndent()
+        autor.email = ""
 
         mockMvc.perform(
             post(BASE_ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(autorRequest),
+                .content(objectMapper.writeValueAsString(autor)),
         )
             .andExpect(status().isBadRequest)
     }
 
     @Test
     fun `should return 400 HTTP when try to create some Autor without description`() {
-        val autorRequest = """
-            {
-                "name": "John Frusciante",
-                "email": "john@fru.com",
-                "description": ""
-            }
-        """.trimIndent()
+        autor.description =  ""
 
         mockMvc.perform(
             post(BASE_ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(autorRequest),
+                .content(objectMapper.writeValueAsString(autor)),
         )
             .andExpect(status().isBadRequest)
     }
 
     @Test
     fun `should return 400 HTTP when try to create some Autor with description greater than 400 bytes`() {
-        val autorRequest = """
-            {
-                "name": "John Frusciante",
-                "email": "john@rhcp.com",
-                "description": "John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto "
-            }
-        """.trimIndent()
+
+        autor.description = "John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto John Frusciante saiu do rhcp pq eh tonto "
 
         mockMvc.perform(
             post(BASE_ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(autorRequest),
+                .content(objectMapper.writeValueAsString(autor)),
         )
             .andExpect(status().isBadRequest)
     }
 
     @Test
     fun `should return 400 HTTP when try to create some Autor with invalid email`() {
-        val autorRequest = """
-            {
-                "name": "John Frusciante",
-                "email": "johnfrusciante.com",
-                "description": "Musico e integrante dos Red Hot Chili Peppers"
-            }
-        """.trimIndent()
+        autor.email = "invalid_email"
 
         mockMvc.perform(
             post(BASE_ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(autorRequest),
+                .content(objectMapper.writeValueAsString(autor)),
         )
             .andExpect(status().isBadRequest)
     }
 
     @Test
     fun `should return 400 HTTP when try to create some Autor with an email that is already in use`() {
-        val autorRequest = """
-            {
-                "name": "Arthur Soave",
-                "email": "arthur.soave@tests.comn",
-                "description": "blablablablablabla"
-            }
-        """.trimIndent()
-
         mockMvc.perform(
             post(BASE_ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(autorRequest),
+                .content(objectMapper.writeValueAsString(autor)),
         )
             .andExpect(status().isBadRequest)
     }

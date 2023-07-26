@@ -14,7 +14,7 @@ class Categoria(
     @Id
     var id: UUID,
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "name", nullable = false, unique = true)
     var name: String,
 
     @Column(nullable = false)

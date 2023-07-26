@@ -54,8 +54,12 @@ class AutorService @Autowired constructor(
 
     private fun validateIfEmailAlreadyExists(email: String) {
         logger.debug { "validating if email $email already exists" }
-        autorRepository
-            .findByEmail(email)
-            .orElseThrow { EntityAlreadyExistsException("Autor com o email $email já existente") }
+
+        val autor = autorRepository.findByEmail(email)
+
+        if (autor.isPresent) {
+            logger.error { "email $email already exists" }
+            throw EntityAlreadyExistsException("Autor com o email $email já existente")
+        }
     }
 }
