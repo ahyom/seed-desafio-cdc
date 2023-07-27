@@ -26,7 +26,7 @@ class LivrosController @Autowired constructor(
 
     @PostMapping
     fun createLivro(
-        @Valid @RequestBody
+        @RequestBody
         livroRequest: LivroRequest,
     ): ResponseEntity<LivroRequest> {
         val livro = livroMapper.toEntity(livroRequest)
@@ -43,7 +43,7 @@ class LivrosController @Autowired constructor(
         livroRequest.id = UUID.fromString(idLivro)
         val livro = livroMapper.toEntity(livroRequest)
         val livroCreated = livroService.updateLivro(livro)
-        return ResponseEntity.status(HttpStatus.CREATED).body(livroMapper.fromEntity(livroCreated))
+        return ResponseEntity.status(HttpStatus.OK).body(livroMapper.fromEntity(livroCreated))
     }
 
     @GetMapping

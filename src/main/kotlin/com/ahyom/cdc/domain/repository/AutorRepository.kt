@@ -9,5 +9,5 @@ import java.util.UUID
 @Repository
 interface AutorRepository : CrudRepository<Autor, UUID> {
 
-    fun findByEmail(email: String): Optional<List<Autor>>
+    fun findByEmail(email: String): Optional<Autor>
 }

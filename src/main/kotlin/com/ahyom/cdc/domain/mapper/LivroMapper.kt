@@ -29,6 +29,12 @@ class LivroMapper @Autowired constructor(
     }
 
     override fun toEntity(domain: LivroRequest): Livro {
+        domain.validate().let {
+            if (it.isNotEmpty()) {
+                throw IllegalArgumentException(it.toString())
+            }
+        }
+
         if (domain.id == null) {
             domain.id = UUID.randomUUID()
         }
