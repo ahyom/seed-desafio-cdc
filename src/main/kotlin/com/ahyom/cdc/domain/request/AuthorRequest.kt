@@ -1,13 +1,12 @@
 package com.ahyom.cdc.domain.request
 
 import jakarta.validation.constraints.Email
-import jakarta.validation.constraints.Max
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 import java.time.LocalDateTime
 import java.util.UUID
 
-data class AutorRequest(
+data class AuthorRequest(
 
     var id: UUID?,
 

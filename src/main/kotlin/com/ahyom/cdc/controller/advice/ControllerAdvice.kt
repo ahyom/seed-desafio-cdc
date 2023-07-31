@@ -1,7 +1,7 @@
 package com.ahyom.cdc.controller.advice
 
-import com.ahyom.cdc.controller.AutorController
-import com.ahyom.cdc.controller.CategoriaController
+import com.ahyom.cdc.controller.AuthorController
+import com.ahyom.cdc.controller.CategoryController
 import com.ahyom.cdc.domain.exception.BadRequestException
 import com.ahyom.cdc.domain.exception.EntityAlreadyExistsException
 import com.ahyom.cdc.domain.exception.NotFoundException
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 
 private val logger = KotlinLogging.logger {}
 
-@ControllerAdvice(assignableTypes = [AutorController::class, CategoriaController::class])
+@ControllerAdvice(assignableTypes = [AuthorController::class, CategoryController::class])
 class ControllerAdvice {
 
     @ExceptionHandler(EntityAlreadyExistsException::class)

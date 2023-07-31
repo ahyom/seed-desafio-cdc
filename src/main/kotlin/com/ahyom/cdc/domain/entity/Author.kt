@@ -8,15 +8,21 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 @Entity
-@Table(name = "tb_categoria")
-class Categoria(
+@Table(name = "tb_author")
+class Author(
 
     @Id
     var id: UUID,
 
-    @Column(name = "name", nullable = false, unique = true)
+    @Column(nullable = false, unique = false)
     var name: String,
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = false)
+    var email: String,
+
+    @Column(length = 400, nullable = false, unique = false)
+    var description: String,
+
+    @Column(nullable = false, unique = false)
     var createdAt: LocalDateTime,
 )

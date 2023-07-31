@@ -1,6 +1,6 @@
 package com.ahyom.cdc.controller
 
-import com.ahyom.cdc.domain.entity.Categoria
+import com.ahyom.cdc.domain.entity.Category
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -14,7 +14,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -23,19 +22,19 @@ private const val BASE_ENDPOINT = "/categoria"
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("local")
-class CategoriaControllerTest @Autowired constructor(
+class CategoryControllerTest @Autowired constructor(
     val mockMvc: MockMvc,
     val objectMapper: ObjectMapper,
 ) {
 
-    private lateinit var categoria: Categoria
+    private lateinit var category: Category
 
     private var idCategoria = "db540faf-a5e4-4122-b54c-653fc3ed5c4f"
     private var nameCategoria = "Java"
 
     @BeforeEach
     fun setup() {
-        categoria = Categoria(
+        category = Category(
             id = UUID.fromString(idCategoria),
             name = nameCategoria,
             createdAt = LocalDateTime.now(),
@@ -47,7 +46,7 @@ class CategoriaControllerTest @Autowired constructor(
         mockMvc.perform(
             post(BASE_ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(categoria)),
+                .content(objectMapper.writeValueAsString(category)),
         )
             .andExpect(status().isCreated)
             .andExpect(jsonPath("$.id").exists())
@@ -73,7 +72,7 @@ class CategoriaControllerTest @Autowired constructor(
         )
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.id").value(idCategoria))
-            .andExpect(jsonPath("$.name").value(categoria.name))
+            .andExpect(jsonPath("$.name").value(category.name))
     }
 
     @Test
@@ -87,12 +86,12 @@ class CategoriaControllerTest @Autowired constructor(
 
     @Test
     fun `should return 400 HTTP when try to create some category without name`() {
-        categoria.name = ""
+        category.name = ""
 
         mockMvc.perform(
             post(BASE_ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(categoria)),
+                .content(objectMapper.writeValueAsString(category)),
         )
             .andExpect(status().isBadRequest)
     }
@@ -102,7 +101,7 @@ class CategoriaControllerTest @Autowired constructor(
         mockMvc.perform(
             post(BASE_ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(categoria)),
+                .content(objectMapper.writeValueAsString(category)),
         )
             .andExpect(status().isBadRequest)
     }
