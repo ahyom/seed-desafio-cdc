@@ -1,7 +1,7 @@
 package com.ahyom.cdc.domain.mapper
 
-import com.ahyom.cdc.domain.entity.Autor
-import com.ahyom.cdc.domain.request.AutorRequest
+import com.ahyom.cdc.domain.entity.Author
+import com.ahyom.cdc.domain.request.AuthorRequest
 import mu.KotlinLogging
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
@@ -10,9 +10,9 @@ import java.util.UUID
 private val logger = KotlinLogging.logger {}
 
 @Component
-class AutorMapper : Mapper<AutorRequest, Autor> {
-    override fun fromEntity(entity: Autor): AutorRequest {
-        return AutorRequest(
+class AuthorMapper : Mapper<AuthorRequest, Author> {
+    override fun fromEntity(entity: Author): AuthorRequest {
+        return AuthorRequest(
             id = entity.id,
             name = entity.name,
             email = entity.email,
@@ -21,7 +21,7 @@ class AutorMapper : Mapper<AutorRequest, Autor> {
         )
     }
 
-    override fun toEntity(domain: AutorRequest): Autor {
+    override fun toEntity(domain: AuthorRequest): Author {
         if (domain.id == null) {
             logger.debug { "generating id for autor..." }
             domain.id = UUID.randomUUID()
@@ -31,7 +31,7 @@ class AutorMapper : Mapper<AutorRequest, Autor> {
             domain.createdAt = LocalDateTime.now()
         }
 
-        return Autor(
+        return Author(
             id = domain.id!!,
             name = domain.name,
             email = domain.email,
