@@ -32,9 +32,9 @@ data class LivroRequest(
     @field:Past(message = "Data de publicação deve ser a partir da data atual")
     val publishDate: LocalDateTime,
 
-    val categoria: CategoriaRequest,
+    val categoria: CategoryRequest,
 
-    val autor: AutorRequest,
+    val autor: AuthorRequest,
 
     var createdAt: LocalDateTime?,
 ) {

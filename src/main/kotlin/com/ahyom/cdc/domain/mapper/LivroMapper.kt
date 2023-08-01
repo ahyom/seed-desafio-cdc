@@ -9,8 +9,8 @@ import java.util.UUID
 
 @Component
 class LivroMapper @Autowired constructor(
-    val categoriaMapper: CategoriaMapper,
-    val autorMapper: AutorMapper,
+    val categoryMapper: CategoryMapper,
+    val authorMapper: AuthorMapper,
 ) : Mapper<LivroRequest, Livro> {
     override fun fromEntity(entity: Livro): LivroRequest {
         return LivroRequest(
@@ -22,8 +22,8 @@ class LivroMapper @Autowired constructor(
             pageNumbers = entity.pageNumbers,
             isbn = entity.isbn,
             publishDate = entity.publishDate,
-            categoria = categoriaMapper.fromEntity(entity.categoria),
-            autor = autorMapper.fromEntity(entity.autor),
+            categoria = categoryMapper.fromEntity(entity.categoria),
+            autor = authorMapper.fromEntity(entity.autor),
             createdAt = entity.createdAt,
         )
     }
@@ -52,8 +52,8 @@ class LivroMapper @Autowired constructor(
             pageNumbers = domain.pageNumbers,
             isbn = domain.isbn,
             publishDate = domain.publishDate,
-            categoria = categoriaMapper.toEntity(domain.categoria),
-            autor = autorMapper.toEntity(domain.autor),
+            categoria = categoryMapper.toEntity(domain.categoria),
+            autor = authorMapper.toEntity(domain.autor),
             createdAt = domain.createdAt!!,
         )
     }
