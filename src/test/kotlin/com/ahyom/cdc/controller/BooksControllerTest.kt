@@ -3,11 +3,12 @@ package com.ahyom.cdc.controller
 import com.ahyom.cdc.domain.entity.Author
 import com.ahyom.cdc.domain.entity.Books
 import com.ahyom.cdc.domain.entity.Category
+import com.ahyom.cdc.domain.exception.EntityAlreadyExistsException
+import com.ahyom.cdc.domain.mapper.BookMapper
 import com.ahyom.cdc.service.BooksService
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import org.springframework.beans.factory.annotation.Autowired
@@ -31,27 +32,24 @@ private const val BASE_ENDPOINT = "/books"
 class BooksControllerTest @Autowired constructor(
     val mockMvc: MockMvc,
     val objectMapper: ObjectMapper,
+    @MockBean val booksService: BooksService,
+    @MockBean val bookMapper: BookMapper,
 ) {
 
     private var idAuthor = UUID.fromString("0678b0a4-2aed-4122-b02c-c704fa6a24a9")
     private var idCategory = UUID.fromString("73870e23-5360-485e-a55c-e93920628399")
     private var idBook = UUID.fromString("ffbfc1dc-bab2-4cac-ae99-c8942073ca27")
 
-    @MockBean
-    private lateinit var booksService: BooksService
-
     private lateinit var book: Books
 
     @BeforeEach
     fun setUp() {
-        book = buildBook()
         MockitoAnnotations.openMocks(this)
+        book = buildBook()
     }
 
     @Test
     fun `should return 201 HTTP when try to create some Book`() {
-        `when`(booksService.createBook(book)).thenReturn(book)
-
         mockMvc.perform(
             post(BASE_ENDPOINT)
                 .contentType("application/json")
@@ -64,6 +62,8 @@ class BooksControllerTest @Autowired constructor(
     @Test
     fun `should return 200 HTTP when try to update some Book`() {
         book.pageNumbers = 200
+        `when`(booksService.createBook(book)).thenReturn(book)
+
         mockMvc.perform(
             put("$BASE_ENDPOINT/$idBook")
                 .contentType("application/json")
@@ -76,6 +76,8 @@ class BooksControllerTest @Autowired constructor(
 
     @Test
     fun `should return 200 HTTP when try to get a list of Books`() {
+        `when`(booksService.getBooks()).thenReturn(listOf(book))
+
         mockMvc.perform(
             MockMvcRequestBuilders.get(BASE_ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON),
@@ -86,6 +88,8 @@ class BooksControllerTest @Autowired constructor(
 
     @Test
     fun `should return 200 HTTP when try to get some Book by ID`() {
+        `when`(booksService.getBookById(idBook)).thenReturn(book)
+
         mockMvc.perform(
             MockMvcRequestBuilders.get("$BASE_ENDPOINT/$idBook")
                 .contentType(MediaType.APPLICATION_JSON),
@@ -95,7 +99,7 @@ class BooksControllerTest @Autowired constructor(
     }
 
     @Test
-    fun `should return 200 HTTP when try to delete some Book`() {
+    fun `should return 204 HTTP when try to delete some Book`() {
         mockMvc.perform(
             MockMvcRequestBuilders.delete("$BASE_ENDPOINT/$idBook")
                 .contentType(MediaType.APPLICATION_JSON),
@@ -115,10 +119,19 @@ class BooksControllerTest @Autowired constructor(
             .andExpect(jsonPath("$.cause").value("[Titulo é obrigatório]"))
     }
 
-//    @Test
-//    fun `should return 400 HTTP when try to create some Book with a title that already exists`() {
-//        TODO()
-//    }
+    @Test
+    fun `should return 400 HTTP when try to create some Book with a title that already exists`() {
+        `when`(booksService.createBook(book))
+            .thenThrow(EntityAlreadyExistsException("Book with title ${book.title} already exists"))
+
+        mockMvc.perform(
+            post(BASE_ENDPOINT)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(book)),
+        )
+            .andExpect(status().isBadRequest)
+            .andExpect(jsonPath("$.cause").value("Book with title ${book.title} already exists"))
+    }
 
     @Test
     fun `should return 400 HTTP when try to create some Book with not summary`() {
@@ -134,7 +147,13 @@ class BooksControllerTest @Autowired constructor(
 
     @Test
     fun `should return 400 HTTP when try to create some Book and summary has more than 500 characters`() {
-        book.summary = "Em um mundo futurista, a humanidade enfrenta desafios inimagináveis. A tecnologia avançou além das expectativas, mas com isso veio uma ameaça nunca vista antes. A busca pela sobrevivência força heróis improváveis a se unirem em uma jornada épica. Em cada esquina, um segredo é revelado e alianças são testadas. Enfrentando criaturas inumanas e dilemas éticos, eles devem encontrar força interna para superar os obstáculos. Uma trama emocionante de ação, suspense e romance se desdobra enquanto o destino do mundo está em jogo. O que eles sacrificariam para um amanhã melhor?"
+        book.summary = "Em um mundo futurista, a humanidade enfrenta desafios inimagináveis. A tecnologia " +
+            "avançou além das expectativas, mas com isso veio uma ameaça nunca vista antes. A busca " +
+            "pela sobrevivência força heróis improváveis a se unirem em uma jornada épica. Em cada " +
+            "esquina, um segredo é revelado e alianças são testadas. Enfrentando criaturas inumanas " +
+            "e dilemas éticos, eles devem encontrar força interna para superar os obstáculos. Uma " +
+            "trama emocionante de ação, suspense e romance se desdobra enquanto o destino do mundo " +
+            "está em jogo. O que eles sacrificariam para um amanhã melhor?"
         mockMvc.perform(
             post(BASE_ENDPOINT)
                 .contentType("application/json")
@@ -182,6 +201,9 @@ class BooksControllerTest @Autowired constructor(
 
     @Test
     fun `should return 400 HTTP when try to create some Book with a ISBN that already exists`() {
+        `when`(booksService.createBook(book))
+            .thenThrow(EntityAlreadyExistsException("Book with isbn ${book.isbn} already exists"))
+
         mockMvc.perform(
             post(BASE_ENDPOINT)
                 .contentType("application/json")
