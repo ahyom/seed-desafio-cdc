@@ -29,7 +29,7 @@ data class BookRequest(
     @field:NotBlank(message = "ISBN é obrigatório")
     val isbn: String,
 
-    @field:Past(message = "Data de publicação deve ser a partir da data atual")
+    // @field:Past(message = "Data de publicação deve ser a partir da data atual")
     val publishDate: LocalDateTime,
 
     val category: CategoryRequest,
