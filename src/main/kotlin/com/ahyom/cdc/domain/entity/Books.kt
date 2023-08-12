@@ -9,8 +9,8 @@ import jakarta.persistence.OneToOne
 import java.time.LocalDateTime
 import java.util.UUID
 
-@Entity(name = "tb_livros")
-class Livro(
+@Entity(name = "tb_books")
+class Books(
 
     @Id
     var id: UUID,
@@ -37,11 +37,11 @@ class Livro(
 
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "categoria_id", referencedColumnName = "id")
-    var categoria: Category,
+    var category: Category,
 
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "autor_id", referencedColumnName = "id")
-    var autor: Author,
+    var author: Author,
 
     @Column(nullable = false)
     var createdAt: LocalDateTime,

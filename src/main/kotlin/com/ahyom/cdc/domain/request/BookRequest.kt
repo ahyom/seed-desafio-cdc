@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size
 import java.time.LocalDateTime
 import java.util.UUID
 
-data class LivroRequest(
+data class BookRequest(
     var id: UUID?,
 
     @field:NotBlank(message = "Titulo é obrigatório")
@@ -32,9 +32,9 @@ data class LivroRequest(
     @field:Past(message = "Data de publicação deve ser a partir da data atual")
     val publishDate: LocalDateTime,
 
-    val categoria: CategoryRequest,
+    val category: CategoryRequest,
 
-    val autor: AuthorRequest,
+    val author: AuthorRequest,
 
     var createdAt: LocalDateTime?,
 ) {

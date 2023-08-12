@@ -1,19 +1,19 @@
 package com.ahyom.cdc.domain.mapper
 
-import com.ahyom.cdc.domain.entity.Livro
-import com.ahyom.cdc.domain.request.LivroRequest
+import com.ahyom.cdc.domain.entity.Books
+import com.ahyom.cdc.domain.request.BookRequest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 import java.util.UUID
 
 @Component
-class LivroMapper @Autowired constructor(
+class BookMapper @Autowired constructor(
     val categoryMapper: CategoryMapper,
     val authorMapper: AuthorMapper,
-) : Mapper<LivroRequest, Livro> {
-    override fun fromEntity(entity: Livro): LivroRequest {
-        return LivroRequest(
+) : Mapper<BookRequest, Books> {
+    override fun fromEntity(entity: Books): BookRequest {
+        return BookRequest(
             id = entity.id,
             title = entity.title,
             summary = entity.summary,
@@ -22,13 +22,13 @@ class LivroMapper @Autowired constructor(
             pageNumbers = entity.pageNumbers,
             isbn = entity.isbn,
             publishDate = entity.publishDate,
-            categoria = categoryMapper.fromEntity(entity.categoria),
-            autor = authorMapper.fromEntity(entity.autor),
+            category = categoryMapper.fromEntity(entity.category),
+            author = authorMapper.fromEntity(entity.author),
             createdAt = entity.createdAt,
         )
     }
 
-    override fun toEntity(domain: LivroRequest): Livro {
+    override fun toEntity(domain: BookRequest): Books {
         domain.validate().let {
             if (it.isNotEmpty()) {
                 throw IllegalArgumentException(it.toString())
@@ -43,7 +43,7 @@ class LivroMapper @Autowired constructor(
             domain.createdAt = LocalDateTime.now()
         }
 
-        return Livro(
+        return Books(
             id = domain.id!!,
             title = domain.title,
             summary = domain.summary,
@@ -52,8 +52,8 @@ class LivroMapper @Autowired constructor(
             pageNumbers = domain.pageNumbers,
             isbn = domain.isbn,
             publishDate = domain.publishDate,
-            categoria = categoryMapper.toEntity(domain.categoria),
-            autor = authorMapper.toEntity(domain.autor),
+            category = categoryMapper.toEntity(domain.category),
+            author = authorMapper.toEntity(domain.author),
             createdAt = domain.createdAt!!,
         )
     }
