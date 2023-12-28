@@ -10,7 +10,7 @@ class CountryRequest(
     @field:NotBlank(message = "Name is required")
     val name: String,
 
-    val states: List<String>?,
+    val states: List<StateRequest>?,
 ) {
 
     fun validate(): List<String> {
