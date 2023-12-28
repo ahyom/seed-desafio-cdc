@@ -8,19 +8,23 @@ import java.util.UUID
 
 @Component
 class CountryMapper @Autowired constructor(
+        val stateMapper: StateMapper
 ) : Mapper<CountryRequest, Country> {
 
     override fun fromEntity(entity: Country): CountryRequest {
-        val states: List<String> = entity.states?.map { it.name } ?: emptyList()
+        val states = entity.states?.map { stateMapper.fromEntity(it) } ?: emptyList()
 
         return CountryRequest(
             id = entity.id,
             name = entity.name,
-            states = listOf(states.toString()),
+            states = states,
         )
     }
 
     override fun toEntity(domain: CountryRequest): Country {
+
+        val states = domain.states?.map { stateMapper.toEntity(it) } ?: emptyList()
+
         domain.validate().let {
             if (it.isNotEmpty()) {
                 throw IllegalArgumentException(it.toString())
@@ -34,7 +38,7 @@ class CountryMapper @Autowired constructor(
         return Country(
             id = domain.id!!,
             name = domain.name,
-            null,
+            states = states,
         )
     }
 }

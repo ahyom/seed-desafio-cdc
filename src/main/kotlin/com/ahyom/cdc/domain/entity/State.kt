@@ -18,8 +18,4 @@ class State(
 
     @Column(name = "name", nullable = false, unique = true)
     var name: String,
-
-    @ManyToOne(cascade = [CascadeType.ALL])
-    @JoinColumn(name = "id_country", referencedColumnName = "id")
-    var country: Country,
 )

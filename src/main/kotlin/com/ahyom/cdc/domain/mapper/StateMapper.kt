@@ -7,15 +7,12 @@ import org.springframework.stereotype.Component
 import java.util.UUID
 
 @Component
-class StateMapper @Autowired constructor(
-    val countryMapper: CountryMapper,
-) : Mapper<StateRequest, State> {
+class StateMapper : Mapper<StateRequest, State> {
 
     override fun fromEntity(entity: State): StateRequest {
         return StateRequest(
             id = entity.id,
             name = entity.name,
-            country = countryMapper.fromEntity(entity.country),
         )
     }
 
@@ -33,7 +30,6 @@ class StateMapper @Autowired constructor(
         return State(
             id = domain.id!!,
             name = domain.name,
-            country = countryMapper.toEntity(domain.country!!),
         )
     }
 }
